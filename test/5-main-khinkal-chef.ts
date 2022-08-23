@@ -37,13 +37,6 @@ before(async () => {
 
 it("solves the challenge", async function () {
 
-  const attackerLPFactory = await ethers.getContractFactory('MainChefAttackerLP')
-  let attackerLP = await attackerLPFactory.connect(attacker).deploy(mainChef.address)
-
-  await attackerLP.connect(attacker).attackSetup()
-  await attackerLP.connect(attacker).deposit() // done separately b/c need to wait a block before rewards start
-  await attackerLP.connect(attacker).startAttack()
-
 });
 
 after(async () => {

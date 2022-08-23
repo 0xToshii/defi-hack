@@ -27,10 +27,6 @@ before(async () => {
 
 it("solves the challenge", async function () {
 
-  // the first call to deposit will mint an arbitrary number of tokens to the caller
-  await mayTheForce.connect(attacker).deposit(precision.mul(1))
-  await mayTheForce.connect(attacker).withdraw(precision.mul(1))
-
 });
 
 after(async () => {

